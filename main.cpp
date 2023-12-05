@@ -34,68 +34,55 @@ double average_age_by_iq (const Human *humanArray, size_t size, const unsigned i
     }
 }
 
-void country_by_average_iq(const Human *humanArray, size_t size){
-    // создадим матрицу 1 на size (здесь будем хранить множество названий стран)
-    string countries[size];
-    unsigned int count_countries = 0;
-    // матрица 2 на m, где первая строка - сумма iq жителей конкретной страны, вторая строка - кол-во жителей конкретной страны
-    unsigned int array[2][size];
-    for (int i=0; i < size; i++){ //проходимся по массиву обьектов
-        string object_country;
-        object_country = humanArray[i].get_country();
-        // пройдем по массиву countries, если страна уже дописана, то дополним столбец найденной старны в array
-        bool flag=false; //допустим что страна не добавлена
-        for (int j=0; j<size; j++){
-            if (countries[j] == object_country){
-                flag = true;
-                array[0][j] += humanArray[i].get_iq();
-                array[1][j] += 1;
+struct countries_data{
+    string name;
+    unsigned int count_people{};
+    unsigned int total_iq{};
+    double average_iq{};
+
+};
+
+void countries_by_average_iq(const Human *humanArray, size_t size){
+    unsigned int count_countries = 1;
+    countries_data array[size];
+    if (size == 0){
+        cerr << "Массив пустой\n";
+        exit(1);
+    }
+    array[0] = {humanArray[0].get_country(), 1, humanArray[0].get_iq(), double(humanArray[0].get_iq())};
+    for (int i=1; i < size; i++){
+        bool flag = true;
+        for (int j=0; j < count_countries; j++){
+            if (array[j].name == humanArray[i].get_country()){
+                flag = false;
+                array[j].count_people++;
+                array[j].total_iq += humanArray[i].get_iq();
+                array[j].average_iq = array[j].total_iq/double(array[j].count_people);
                 break;
             }
         }
-        if (!flag){ //если страна не записана, то добавим ее и инициализируем столбец array
-            countries[count_countries] = object_country;
-            array[0][count_countries] = humanArray[i].get_iq();
-            array[1][count_countries] = 1;
+        if (flag){ // добавим нашу структуру
+            array[count_countries] = {humanArray[i].get_country(), 1, humanArray[i].get_iq(), double(humanArray[i].get_iq())};
             count_countries++;
         }
     }
-    // вывод
-//    for (int i = 0; i < size; i++){
-//        cout << countries[i] << ' ';
-//    }
-//    cout << '\n';
-//    for (int i=0; i < 2; i++){
-//        for (int j=0; j<count_countries; j++){
-//            cout << array[i][j] << ' ';
-//        }
-//        cout << '\n';
-//    }
 
-    //сортировка
-    for (int i=0; i < count_countries-1; i++){
-        for (int j=0; j < count_countries-i-1; j++){
-            double average_iq1 = array[0][j+1]/double(array[1][j+1]), average_iq2 = array[0][j]/double(array[1][j]);
-            if (average_iq1 > average_iq2){
-                unsigned int temp1, temp2;
-                string temp3;
-                temp1 = array[0][j+1];
-                temp2 = array[1][j+1];
-                temp3 = countries[j+1];
-                array[0][j+1] = array[0][j];
-                array[1][j+1] = array[1][j];
-                countries[j+1] = countries[j];
-                array[0][j] = temp1;
-                array[1][j] = temp2;
-                countries[j] = temp3;
+    // сортировка
+    for (int i=0; i < count_countries - 1; i++){
+        for (int j=0; j < count_countries - i - 1; j++){
+            if (array[i].average_iq < array[i+1].average_iq) {
+                countries_data temp = array[i];
+                array[i] = array[i+1];
+                array[i+1] = temp;
             }
         }
     }
+    //адекватный выовод
     cout << "Counties by average iq (decreasing):\n";
-    for (int i = 0; i < size; i++){
-        cout << countries[i] << ' ';
+    for (int i = 0; i < count_countries; i++){
+        cout << array[i].name << " ";
     }
-    cout << '\n';
+    cout << "\n";
 }
 
 int main(){
@@ -134,6 +121,6 @@ int main(){
     cin >> target_iq;
     cout <<"Average age people with iq > {" << target_iq << "} - " << average_age_by_iq(humanArray, n, target_iq) << "\n";
 
-    country_by_average_iq(humanArray, n);
+    countries_by_average_iq(humanArray, n);
     return 0;
 }
