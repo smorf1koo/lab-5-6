@@ -20,20 +20,23 @@ public:
     ~Human();
 
 
-    void print(){ // форматированный вывод
-        cout <<  "Name: " << name << " gender: " << gender << " race: " << race << " age: " << age<< " country: " << country << " iq: " << iq << '\n';
-    }
+    void print_name(){ cout << "Name: " << name << '\n';}
+    void print_race(){ cout << "Race: " << race << '\n';}
+    void print_country(){ cout << "Country: " << country << '\n';}
+    void print_gender(){ cout << "Gender: " << gender << '\n';}
+    void print_age(){ cout << "Age: " << age << '\n';}
+    void print_iq(){ cout << "Iq: " << iq << '\n';}
 
     [[nodiscard]] string get_race() const { return race;}
     [[nodiscard]] unsigned int get_iq() const{ return iq;}
     [[nodiscard]] unsigned int get_age() const{ return age;}
     [[nodiscard]] string get_country() const{ return country;}
 
-    [[maybe_unused]]void change_name(string _name){name = std::move(_name);}
-    [[maybe_unused]]void change_gender(string _gender){gender = std::move(_gender);}
-    [[maybe_unused]]void change_race(string _race){race = std::move(_race);}
+    [[maybe_unused]]void change_name(string _name){name = _name;} // "vevve" -- > ""
+    [[maybe_unused]]void change_gender(string _gender){gender = _gender;}
+    [[maybe_unused]]void change_race(string _race){race = _race;}
     [[maybe_unused]]void change_age(unsigned int _age){age = _age;}
-    [[maybe_unused]]void change_country(string _country){country = std::move(_country);}
+    [[maybe_unused]]void change_country(string _country){country = _country;}
     [[maybe_unused]]void change_iq(unsigned int _iq){iq = _iq;}
 
 };
@@ -46,7 +49,7 @@ Human::Human(){
     name = "Gleb Petrov", gender = "male", race = "Rus", age = 10; country = "Russia", iq = 200;
 }
 
-[[maybe_unused]]Human::Human(Human &other){
+Human::Human(Human &other){
     name = other.name;
     gender = other.gender;
     race = other.race;

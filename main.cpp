@@ -108,7 +108,8 @@ int main(){
             Human("Andreev_Andrey_Andreevich", "male", "mongoloid", 30, "USA", 123)
     };
 //    humanArray[0].change_country("Japan");
-    humanArray[0].print();
+    humanArray[0].print_age();
+    humanArray[0].print_name();
 
 
     string target_race;
