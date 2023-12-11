@@ -25,11 +25,8 @@ public:
     }
 
     [[nodiscard]] string get_race() const { return race;}
-
     [[nodiscard]] unsigned int get_iq() const{ return iq;}
-
     [[nodiscard]] unsigned int get_age() const{ return age;}
-
     [[nodiscard]] string get_country() const{ return country;}
 
     [[maybe_unused]]void change_name(string _name){name = std::move(_name);}

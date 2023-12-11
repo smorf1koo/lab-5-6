@@ -44,7 +44,8 @@ struct countries_data{
 
 void countries_by_average_iq(const Human *humanArray, size_t size){
     unsigned int count_countries = 1;
-    countries_data array[size];
+//    countries_data array[size];
+    countries_data* array = new countries_data[size];
     if (size == 0){
         cerr << "Массив пустой\n";
         exit(1);
@@ -67,22 +68,29 @@ void countries_by_average_iq(const Human *humanArray, size_t size){
         }
     }
 
+    countries_data* data = new countries_data[count_countries];
+    for (int i = 0; i < count_countries; i++){
+        data[i] = array[i];
+    }
+    delete[] array;
+
     // сортировка
     for (int i=0; i < count_countries - 1; i++){
         for (int j=0; j < count_countries - i - 1; j++){
-            if (array[i].average_iq < array[i+1].average_iq) {
-                countries_data temp = array[i];
-                array[i] = array[i+1];
-                array[i+1] = temp;
+            if (data[i].average_iq < data[i+1].average_iq) {
+                countries_data temp = data[i];
+                data[i] = data[i+1];
+                data[i+1] = temp;
             }
         }
     }
     //адекватный выовод
     cout << "Counties by average iq (decreasing):\n";
     for (int i = 0; i < count_countries; i++){
-        cout << array[i].name << " ";
+        cout << data[i].name << " ";
     }
     cout << "\n";
+    delete[] data;
 }
 
 int main(){
@@ -99,16 +107,8 @@ int main(){
             Human("Nikolaev_Kolya_Victorovich", "male", "mongoloid", 71, "Russia", 15),
             Human("Andreev_Andrey_Andreevich", "male", "mongoloid", 30, "USA", 123)
     };
-//    for(size_t i = 0; i < n; i++){
-//        cout << "Human " << i+1 << '\n';
-//
-//        string name, race, country, gender;
-//        unsigned int age, iq;
-//        cout << "Enter name, gender, race, age, country, iq\n";
-//        cin >> name >> gender >> race >> age >> country >> iq;
-//
-//        humanArray[i] = Human(name,gender, race, age, country, iq);
-//    }
+//    humanArray[0].change_country("Japan");
+    humanArray[0].print();
 
 
     string target_race;
